@@ -1,13 +1,14 @@
 ;;; matrix-client.el --- A minimal chat client for the Matrix.org RPC
 
+;; Copyright (C) 2017-2018 Jay Kamat
 ;; Copyright (C) 2015 Ryan Rix
 ;; Author: Ryan Rix <ryan@whatthefuck.computer>
-;; Maintainer: Ryan Rix <ryan@whatthefuck.computer>
+;; Maintainer: Jay Kamat <jaygkamat@gmail.com>
 ;; Created: 21 June 2015
-;; Keywords: web
-;; Homepage: http://doc.rix.si/matrix.html
+;; Keywords: web, comm
+;; Homepage: https://github.com/jgkamat/matrix-client-el
 ;; Package-Version: 0.1.2
-;; Package-Requires: ((emacs "25.1") (dash "2.13.0") (f "0.17.2") (json "1.4") (request "0.2.0") (a "0.1.0") (ov "1.0.6") (rainbow-identifiers "0.2.2") (s "1.12.0") (tracking "2.9"))
+;; Package-Requires: ((emacs "25.1") (dash "2.13.0") (f "0.17.2") (request "0.2.0") (a "0.1.0") (ov "1.0.6") (rainbow-identifiers "0.2.2") (s "1.12.0") (tracking "2.9"))
 
 ;; This file is not part of GNU Emacs.
 

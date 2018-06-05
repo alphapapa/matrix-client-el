@@ -1,11 +1,12 @@
-;;; matrix-sauron.el --- Sauron integration for the Emacs Matrix Client
+;;; matrix-sauron.el --- Sauron integration for the Matrix Client
 
+;; Copyright (C) 2017-2018 Jay Kamat
 ;; Copyright (C) 2015 Ryan Rix
 ;; Author: Ryan Rix <ryan@whatthefuck.computer>
-;; Maintainer: Ryan Rix <ryan@whatthefuck.computer>
+;; Maintainer: Jay Kamat <jaygkamat@gmail.com>
 ;; Created: 21 June 2015
-;; Keywords: web
-;; Homepage: http://doc.rix.si/matrix.html
+;; Keywords: web, comm
+;; Homepage: https://github.com/jgkamat/matrix-client-el
 ;; Package-Version: 0.1.0
 
 ;; This file is not part of GNU Emacs.
@@ -138,7 +139,7 @@
              (cl-reduce
               #'+
               (map 'list
-                   (lambda (rule) 
+                   (lambda (rule)
                      (when (matrix-get 'enabled rule)
                        (let* ((actions (matrix-get 'actions rule))
                               (rule-id (matrix-get 'rule_id rule))
@@ -189,4 +190,4 @@
 
 (provide 'matrix-sauron)
 
-;; End of matrix-sauron.el
+;;; matrix-sauron.el ends here

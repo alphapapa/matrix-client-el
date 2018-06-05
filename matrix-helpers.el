@@ -1,12 +1,14 @@
 ;;; matrix-helpers.el --- Helpers for matrix-client
 
+;; Copyright (C) 2017-2018 Jay Kamat
 ;; Copyright (C) 2015-2016 Ryan Rix
 ;; Author: Ryan Rix <ryan@whatthefuck.computer>
-;; Maintainer: Ryan Rix <ryan@whatthefuck.computer>
+;; Maintainer: Jay Kamat <jaygkamat@gmail.com>
 ;; Created: 4 March 2016
-;; Keywords: web
-;; Homepage: http://doc.rix.si/matrix.html
+;; Keywords: web, comm
+;; Homepage: https://github.com/jgkamat/matrix-client-el
 ;; Package-Version: 0.3.0
+;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is not part of GNU Emacs.
 

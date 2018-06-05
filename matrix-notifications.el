@@ -1,5 +1,14 @@
 ;;; matrix-notifications.el --- Notifications support for matrix-client  -*- lexical-binding: t; -*-
 
+;; Copyright (C) 2017-2018 Adam Porter
+;; Author: Adam Porter <adam@alphapapa.net>
+;; Maintainer: Jay Kamat <jaygkamat@gmail.com>
+;; Created: 14 November 2017
+;; Keywords: web, comm
+;; Homepage: https://github.com/jgkamat/matrix-client-el
+;; Package-Version: 0.3.0
+;; Package-Requires: ((emacs "25.1"))
+
 ;;; Commentary:
 
 ;; This file is not part of GNU Emacs.

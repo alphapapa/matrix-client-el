@@ -1,13 +1,14 @@
 ;;; matrix-client-handlers.el --- Event handlers for Matrix.org RPC
 
+;; Copyright (C) 2017-2018 Jay Kamat
 ;; Copyright (C) 2015 Ryan Rix
 ;; Author: Ryan Rix <ryan@whatthefuck.computer>
 ;; Maintainer: Ryan Rix <ryan@whatthefuck.computer>
 ;; Created: 21 June 2015
-;; Keywords: web
-;; Homepage: http://doc.rix.si/matrix.html
+;; Keywords: web, comm
+;; Homepage: https://github.com/jgkamat/matrix-client-el
 ;; Package-Version: 0.1.0
-;; Package-Requires: ((json))
+;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is not part of GNU Emacs.
 

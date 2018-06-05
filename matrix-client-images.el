@@ -1,3 +1,36 @@
+;;; matrix-client-images.el --- Image support for
+
+;; Copyright (C) 2017-2018 Adam Porter
+;; Copyright (C) 2015 Ryan Rix
+;; Author: Adam Porter <adam@alphapapa.net>
+;; Maintainer: Jay Kamat <jaygkamat@gmail.com>
+;; Created: 11 November 2017
+;; Keywords: web, comm
+;; Homepage: https://github.com/jgkamat/matrix-client-el
+;; Package-Version: 0.1.0
+;; Package-Requires: ((emacs "25.1"))
+
+;; This file is not part of GNU Emacs.
+
+;; matrix-client-images.el is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or (at your
+;; option) any later version.
+;;
+;; matrix-client-images.el is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+;; details.
+;;
+;; You should have received a copy of the GNU General Public License along with
+;; this file.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; `matrix-client-images' provides support for displaying images inline in a
+;; `matrix-client' buffer. See `matrix-client-show-images' and
+;; `matrix-client-image-url-prefixes' for configuration options.
+
 (require 'shr)
 
 (require 'request)
@@ -114,3 +147,5 @@ as an async callback when the image is downloaded."
           (setq orig-point nil))))))
 
 (provide 'matrix-client-images)
+
+;;; matrix-client-images.el ends here
