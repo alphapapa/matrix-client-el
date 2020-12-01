@@ -139,7 +139,7 @@ Without argument, displays help and current setting."
   "Send message to room from notification buffer.
 This only works for replies."
   (interactive)
-  (if-let* ((input (matrix-client--room-input :delete t))
+  (-if-let* ((input (matrix-client--room-input :delete t))
             (room (get-text-property 0 'room input)))
       (progn
         (with-room-buffer room

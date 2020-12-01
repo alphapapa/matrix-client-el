@@ -158,7 +158,7 @@ URL taken from `help-echo' text property."
 (cl-defun matrix-client-tab (&key backward)
   "If point is before prompt, move point to next event; otherwise complete room member names/IDs."
   (interactive)
-  (if-let* ((pos (matrix-client--next-event-pos :backward backward)))
+  (-if-let* ((pos (matrix-client--next-event-pos :backward backward)))
       (goto-char pos)
     (pcomplete)))
 
@@ -175,7 +175,7 @@ URL taken from `help-echo' text property."
   "If point is on a previous message, begin a reply addressed to its sender.  Otherwise, self-insert.
 With prefix, quote message or selected region of message."
   (interactive "P")
-  (if-let* ((sender (get-text-property (point) 'sender)))
+  (-if-let* ((sender (get-text-property (point) 'sender)))
       ;; Start reply.
       ;; Getting room from text property is for using from notifications buffer.
       (let* ((room (or (get-text-property (point) 'room)
@@ -394,9 +394,9 @@ If HTML is non-nil, treat INPUT as HTML."
     ;; NOTE: `matrix--prev-property-change' is actually returning the point at which the property
     ;; CEASES to have the value, rather than where the value begins.  I don't like that, but
     ;; changing that function would break a lot of other things, so I'm not going to do that now.
-    (when-let* ((metadata-start (matrix--prev-property-change (point-max) 'event_id id))
-                (message-start (next-single-property-change metadata-start 'face))
-                (message-end (next-single-property-change metadata-start 'event_id)))
+    (-when-let* ((metadata-start (matrix--prev-property-change (point-max) 'event_id id))
+                 (message-start (next-single-property-change metadata-start 'face))
+                 (message-end (next-single-property-change metadata-start 'event_id)))
       (s-trim (buffer-substring message-start message-end)))))
 
 (defun matrix-client--html-to-plain (html)
@@ -504,7 +504,7 @@ Update [pending] overlay."
                ((eieio user) session))
     (with-room-buffer room
       ;; MAYBE: Should probably make a little library to insert and replace things in the buffer...
-      (if-let* ((inhibit-read-only t)
+      (-if-let* ((inhibit-read-only t)
                 ;; MAYBE: Ensure that only one overlay is found.
                 (ov (car (ov-in 'transaction_id txn-id)))
                 (beg (ov-beg ov))
@@ -721,7 +721,7 @@ Called from inside the room's buffer.")
     (setq-local matrix-client-room room)
     ;; Load notification settings for room
     (with-slots (id client-data) room
-      (when-let* ((rules (a-get matrix-client-room-notification-rules id)))
+      (-when-let* ((rules (a-get matrix-client-room-notification-rules id)))
         (oset client-data notification-rules rules)))
     ;; Drag-and-drop support
     (setq-local x-dnd-test-function #'matrix-client--x-dnd-test-function)
@@ -1020,7 +1020,7 @@ INPUT should be, e.g. \"#room:matrix.org\".")
 
 (defun matrix-client--dnd-open-local-file (uri _action)
   "Handle drag-and-drop event by offering to upload file at URI to current room."
-  (if-let* ((path (dnd-get-local-file-name uri t))
+  (-if-let* ((path (dnd-get-local-file-name uri t))
             (readable (file-readable-p path)))
       (when (matrix-client-upload matrix-client-room path)
         ;; Return `private' to the sending app (this appears to be redundant, because, as
@@ -1039,7 +1039,7 @@ INPUT should be, e.g. \"#room:matrix.org\".")
   "Like `x-dnd-default-test-function', but always returns the suggested action.
 Works around bug in Chrome/Chromium.  Hopefully doesn't break
 other apps' ability to drag-and-drop into Emacs."
-  (when-let* ((type (x-dnd-choose-type types)))
+  (-when-let* ((type (x-dnd-choose-type types)))
     (cons 'copy type)))
 
 ;;;;; Support

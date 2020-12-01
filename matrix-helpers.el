@@ -87,11 +87,11 @@ PAIRS should be of the form (SLOT VALUE SLOT VALUE...)."
   ;; `buffer-list-update-hook', and the fact that it's called in so
   ;; many places in Emacs, it would be better to do this a different
   ;; way altogether.  Maybe we could use `window-configuration-change-hook'.
-  (when-let* ((room matrix-client-room)
-              (buffer (oref* room client-data buffer))
-              (window (get-buffer-window buffer))
-              (window-active-p (equal window (selected-window)))
-              (not-one-window-p (not (= 1 (length (window-list))))))
+  (-when-let* ((room matrix-client-room)
+               (buffer (oref* room client-data buffer))
+               (window (get-buffer-window buffer))
+               (window-active-p (equal window (selected-window)))
+               (not-one-window-p (not (= 1 (length (window-list))))))
     (when (get-buffer-window buffer 'visible)
       ;; FIXME: Need a way to move the seen line when there's one
       ;; window visible and the user has seen it.  Unfortunately,

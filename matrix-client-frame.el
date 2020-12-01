@@ -124,13 +124,13 @@ automatically."
   "Open a new frame showing room at point.
 Should be called in the frame sidebar buffer."
   (interactive)
-  (when-let* ((buffer (or (get-text-property (1+ (line-beginning-position)) 'buffer)
-                          (oref* (tabulated-list-get-id) client-data buffer)))
-              (frame (make-frame
-                      (a-list 'name (buffer-name buffer)
-                              ;; MAYBE: Save room avatar to a temp file, pass to `icon-type'.
-                              'icon-type (expand-file-name "logo.png"
-                                                           (file-name-directory (locate-library "matrix-client-frame")))))))
+  (-when-let* ((buffer (or (get-text-property (1+ (line-beginning-position)) 'buffer)
+                           (oref* (tabulated-list-get-id) client-data buffer)))
+               (frame (make-frame
+                       (a-list 'name (buffer-name buffer)
+                               ;; MAYBE: Save room avatar to a temp file, pass to `icon-type'.
+                               'icon-type (expand-file-name "logo.png"
+                                                            (file-name-directory (locate-library "matrix-client-frame")))))))
     (with-selected-frame frame
       (switch-to-buffer buffer))))
 
@@ -214,26 +214,26 @@ Should be called manually, e.g. in `matrix-after-sync-hook', by
     (with-selected-frame matrix-client-frame
       ;; Copied from `frame-purpose--update-sidebar' to add grouping.
       (with-current-buffer (frame-purpose--get-sidebar 'create)
-        ;; Use `when-let*' so that if this function is called during initial
+        ;; Use `-when-let*' so that if this function is called during initial
         ;; sync and there are no room buffers yet, it won't give an error.
-        (when-let* ((saved-point (point))
-                    (inhibit-read-only t)
-                    (buffer-sort-fns (frame-parameter nil 'buffer-sort-fns))
-                    ;; FIXME: This works fine but is a little messy.
-                    (buffers (funcall (frame-parameter nil 'sidebar-buffers-fn)))
-                    (sorted-buffers (dolist (fn buffer-sort-fns buffers)
-                                      (setq buffers (-sort fn buffers))))
-                    (buffer-groups (matrix-client-frame-group-buffers sorted-buffers))
-                    (standard-groups (cl-loop for header in '("Favorites" "People")
-                                              collect (cons header (alist-get header buffer-groups nil nil #'string=))))
-                    (low-priority-group (cons "Low priority" (alist-get "Low priority" buffer-groups nil nil #'string=)))
-                    (other-groups (seq-difference buffer-groups (-flatten-n 1 (list standard-groups (list low-priority-group)))
-                                                  (lambda (a b)
-                                                    (string= (car a) (car b)))))
-                    ;; FIXME: Make group order configurable.
-                    (separator (pcase (frame-parameter nil 'sidebar)
-                                 ((or 'left 'right) "\n")
-                                 ((or 'top 'bottom) "  "))))
+        (-when-let* ((saved-point (point))
+                     (inhibit-read-only t)
+                     (buffer-sort-fns (frame-parameter nil 'buffer-sort-fns))
+                     ;; FIXME: This works fine but is a little messy.
+                     (buffers (funcall (frame-parameter nil 'sidebar-buffers-fn)))
+                     (sorted-buffers (dolist (fn buffer-sort-fns buffers)
+                                       (setq buffers (-sort fn buffers))))
+                     (buffer-groups (matrix-client-frame-group-buffers sorted-buffers))
+                     (standard-groups (cl-loop for header in '("Favorites" "People")
+                                               collect (cons header (alist-get header buffer-groups nil nil #'string=))))
+                     (low-priority-group (cons "Low priority" (alist-get "Low priority" buffer-groups nil nil #'string=)))
+                     (other-groups (seq-difference buffer-groups (-flatten-n 1 (list standard-groups (list low-priority-group)))
+                                                   (lambda (a b)
+                                                     (string= (car a) (car b)))))
+                     ;; FIXME: Make group order configurable.
+                     (separator (pcase (frame-parameter nil 'sidebar)
+                                  ((or 'left 'right) "\n")
+                                  ((or 'top 'bottom) "  "))))
           (setf buffer-groups (-flatten-n 1 (list standard-groups
                                                   other-groups
                                                   (list low-priority-group))))
@@ -329,8 +329,8 @@ Should be called manually, e.g. in `matrix-after-sync-hook', by
 
 (defun matrix-client-buffer-latest-event-ts (buffer)
   "Return timestamp of latest event in BUFFER's room."
-  (when-let* ((room (buffer-local-value 'matrix-client-room buffer))
-              (last-event (car (oref* room timeline))))
+  (-when-let* ((room (buffer-local-value 'matrix-client-room buffer))
+               (last-event (car (oref* room timeline))))
     (a-get* last-event 'origin_server_ts)))
 
 (defun matrix-client--string-properties (s)
