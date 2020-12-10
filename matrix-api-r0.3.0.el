@@ -404,15 +404,15 @@ If DNS lookup fails, return DOMAIN."
                                   raw-data (content-type "application/json")
                                   (method "GET") (error #'matrix-request-error-callback) timeout
                                   (query-on-exit t))
-  "Make request to ENDPOINT on SESSION with DATA and call CALLBACK on success.
+  "Make request to ENDPOINT on SESSION with DATA and call SUCCESS on success.
 Request is made asynchronously.  METHOD should be a symbol or
 string, `get' (the default) or `post' (it will be upcased).  ENDPOINT may be a string
 or symbol and should represent the final part of the API
 URL (e.g. for \"/_matrix/client/r0/login\", it should be
 \"login\".  DATA should be an alist which will be automatically
-encoded to JSON.  CALLBACK should be a method specialized on
+encoded to JSON.  SUCCESS should be a method specialized on
 `matrix-session', FIXME whose subsequent arguments are defined in
-accordance with the `request' package's API.  ERROR-CALLBACK, if
+accordance with the `request' package's API.  ERROR, if
 set, will be called if the request fails."
   (declare (indent defun))
   (with-slots (api-url-prefix access-token txn-id) session
@@ -485,15 +485,15 @@ set, will be called if the request fails."
                                           raw-data (content-type "application/json")
                                           (method "GET") (error #'matrix-request-error-callback) timeout
                                           (query-on-exit t))
-  "Using `request', make request to ENDPOINT on SESSION with DATA and call CALLBACK on success.
+  "Using `request', make request to ENDPOINT on SESSION with DATA and call SUCCESS on success.
 Request is made asynchronously.  METHOD should be a symbol or
 string, `get' (the default) or `post' (it will be upcased).  ENDPOINT may be a string
 or symbol and should represent the final part of the API
 URL (e.g. for \"/_matrix/client/r0/login\", it should be
 \"login\".  DATA should be an alist which will be automatically
-encoded to JSON.  CALLBACK should be a method specialized on
+encoded to JSON.  SUCCESS should be a method specialized on
 `matrix-session', FIXME whose subsequent arguments are defined in
-accordance with the `request' package's API.  ERROR-CALLBACK, if
+accordance with the `request' package's API.  ERROR, if
 set, will be called if the request fails."
   ;; NOTE: This is necessary because of the crazy bugs in url.el and request.el.  We can't just use
   ;; one, we have to use both.  This is a copy of `matrix-request' that only changes the
