@@ -345,10 +345,13 @@ Intended to be called from a timer that runs at midnight."
   "Return new avatar string for AVATAR-STRING, sized accordingly.
 Sized according to `matrix-client-room-avatar-in-buffer-name-size'."
   ;; Make a new image to avoid modifying the avatar in the header.
-  (let ((avatar (cl-copy-list (get-text-property 0 'display avatar-string))))
-    (setf (image-property avatar :max-width) matrix-client-room-avatar-in-buffer-name-size
-          (image-property avatar :max-height) matrix-client-room-avatar-in-buffer-name-size)
-    (concat (propertize " " 'display avatar) " ")))
+  (if matrix-client-can-show-images
+      (let ((avatar (cl-copy-list (get-text-property 0 'display avatar-string))))
+        (setf (image-property avatar :max-width) matrix-client-room-avatar-in-buffer-name-size
+              (image-property avatar :max-height) matrix-client-room-avatar-in-buffer-name-size)
+        (concat (propertize " " 'display avatar) " "))
+    (error "Emacs doesn't support images manipulation")))
+
 
 (defun matrix-client-event-timestamp (data)
   "Return timestamp of event DATA."

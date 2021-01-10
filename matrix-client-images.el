@@ -10,13 +10,7 @@
 (defcustom matrix-client-show-images nil
   "Download and show images posted to rooms."
   :type 'boolean
-  :group 'matrix-client
-  :set (lambda (option value)
-         (if (fboundp 'imagemagick-types)
-             (set-default option value)
-           (set-default option nil)
-           (when value
-             (warn "This Emacs was not built with ImageMagick support, so images can't be displayed in Matrix")))))
+  :group 'matrix-client)
 
 (defcustom matrix-client-image-url-prefixes
   (list (rx bow "http" (optional "s") "://"
@@ -31,6 +25,9 @@ the protocol type, if desired.  It will automatically be extended
 to match until the next whitespace character."
   :type '(repeat string)
   :group 'matrix-client)
+
+(defconst matrix-client-can-show-images (or (fboundp 'imagemagick-types) (version< "27.0.49" emacs-version))
+  "Flag indicating if emacs has the requirements to show the images in matrix-client.")
 
 (defun matrix-client--image-urls (text)
   "Return list of supported image URLs in TEXT."
@@ -70,7 +67,8 @@ RESCALE-ARGS are passed to `matrix-client-rescale-image'."
 MAX-WIDTH and MAX-HEIGHT are used if set, otherwise they are
 determined by the size of the buffer's window."
   ;; Based on image.el
-  (when (fboundp 'imagemagick-types)
+  (if (null matrix-client-can-show-images)
+      nil
     (cond ((and max-width max-height)
            ;; Use given size
            )
@@ -85,10 +83,15 @@ determined by the size of the buffer's window."
           (t
            ;; This should not happen with the fixes above, but just in case:
            (warn "Weird error rescaling image, please report.  Buffer: %s" (current-buffer))))
-    (create-image data 'imagemagick 'data-p
-                  :ascent 'center
-                  :max-width max-width
-                  :max-height max-height)))
+    (if (version< "27.0.49" emacs-version)
+        (create-image data nil 'data-p
+                      :ascent 'center
+                      :max-width max-width
+                      :max-height max-height)
+        (create-image data 'imagemagick 'data-p
+                      :ascent 'center
+                      :max-width max-width
+                      :max-height max-height))))
 
 (cl-defun matrix-client-insert-image-callback (&key room message-id url data &allow-other-keys)
   "Insert image into proper place at URL in message MESSAGE-ID in ROOM.

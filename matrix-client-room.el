@@ -1342,7 +1342,7 @@ includes the \"In reply to\" link to the quoted message ID)."
                                                                      (string (string-to-number transaction_id)))))
 
             ;; Start image insertion if necessary
-            (when matrix-client-show-images
+            (when (and matrix-client-can-show-images matrix-client-show-images)
               (cl-loop for url in (-non-nil (append (matrix-client--image-urls message)
                                                     (list matrix-image-url)))
                        do (matrix-client-insert-image room event_id url)))
@@ -1422,7 +1422,7 @@ includes the \"In reply to\" link to the quoted message ID)."
                    (propertize (format "%s %s %s the room avatar" time-string username action)
                                'timestamp timestamp
                                'face 'matrix-client-notice))))
-  :body (when matrix-client-show-room-avatars
+  :body (when (and matrix-client-show-room-avatars matrix-client-can-show-images)
           ;; FIXME: We need to check the "replaces" key for the room avatar events, and only update
           ;; it if it's a new one.  See note in `matrix-client-update'.
           (if url
