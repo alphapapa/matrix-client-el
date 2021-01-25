@@ -12,7 +12,7 @@
 ;; Homepage: https://github.com/alphapapa/matrix-client.el
 
 ;; Package-Version: 0.2.0-pre
-;; Package-Requires: ((emacs "25.1") (anaphora "1.0.0") (dash "2.13.0") (dash-functional "1.2.0") (f "0.17.2") (request "0.2.0") (a "0.1.0") (ov "1.0.6") (s "1.12.0") (tracking "2.9") (esxml "0.3.4") (ht "2.2") (rainbow-identifiers "0.2.2") (frame-purpose "1.2"))
+;; Package-Requires: ((emacs "25.1") (anaphora "1.0.0") (dash "2.13.0") (dash-functional "1.2.0") (f "0.17.2") (request "0.2.0") (a "0.1.0") (ov "1.0.6") (s "1.12.0") (tracking "2.9") (esxml "0.3.4") (ht "2.2") (rainbow-identifiers "0.2.2") (frame-purpose "1.2") (switch-buffer-functions "0.0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -130,6 +130,15 @@ On by default, as this is the typical behavior for a Matrix client."
 (defcustom matrix-client-use-tracking nil
   "Enable tracking.el support in matrix-client."
   :type 'boolean)
+
+(defcustom matrix-client-mark-room-read-on-window-select t
+  "mark rooms as read after selecting its window"
+  :type 'boolean
+  :set (lambda (option value)
+         (if value
+           (add-hook 'switch-buffer-functions 'matrix-mark-buffer-fully-read)
+           (remove-hook 'switch-buffer-functions 'matrix-mark-buffer-fully-read))
+         (set-default option value)))
 
 ;;;; Classes
 
@@ -329,6 +338,11 @@ Intended to be called from a timer that runs at midnight."
       (with-room-buffer room
         (with-silent-modifications
           (matrix-client--update-date-headers))))))
+
+(defun matrix-mark-buffer-fully-read (_previous current)
+  (when-let* ((room (buffer-local-value 'matrix-client-room current)))
+    (with-slots (timeline) room
+      (matrix-update-read-markers room (car timeline)))))
 
 ;;;;; Timeline
 

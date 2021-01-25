@@ -250,6 +250,10 @@ An alist in which room tags, as symbols, are the CAR of each element, and the CD
    (end-token :initarg :end-token
               :initform nil
               :documentation "The most recent event-id in a room, used to push read-receipts to the server.")
+   (last-read :initform nil
+              :documentation "last read event by the user. See variable `matrix-client-mark-room-read-on-window-select`.")
+   (last-fully-read :initform nil
+                    :documentation "last fully-read event by the user. See variable `matrix-client-mark-room-read-on-window-select`.")
    (client-data :initarg :client-data
                 :initform (matrix-room-client-data)
                 :documentation "Reserved for users of the library, who may store whatever they want here.")
@@ -1296,6 +1300,30 @@ TYPING-P should be t or nil."
       :error (lambda (&rest args)
                (matrix-log (a-list 'fn 'matrix-typing-error-callback
                                    'args args))))))
+
+(cl-defun matrix-update-read-markers (room fully-read &optional (read fully-read))
+  "updates ROOM's fully_read marker and optionally read marker to point to FULLY-READ and READ events respectively
+if READ is not specified it's assumed to be the same as FULLY-READ"
+  ;; https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-rooms-roomid-read-markers
+
+  (with-slots* (((id session last-read last-fully-read) room))
+    (unless (and (eq fully-read last-fully-read) (eq read last-read))
+      (let* ((fully-read-id (alist-get 'event_id fully-read))
+            (read-id (alist-get 'event_id read))
+            (data (a-list "m.fully_read" fully-read-id
+                          "m.read" read-id))
+            (room-id (url-hexify-string id))
+            (endpoint (format$ "rooms/$room-id/read_markers")))
+        (matrix-post session endpoint
+          :data data
+          :success (lambda (&rest args)
+                    (matrix-log (a-list 'fn 'matrix-read-marker-success-callback
+                                        'args args)))
+          :error (lambda (&rest args)
+                  (matrix-log (a-list 'fn 'matrix-read-marker-error-callback
+                                      'args args))))
+        (setf last-fully-read fully-read)
+        (setf last-read read)))))
 
 ;;;;; Misc
 
