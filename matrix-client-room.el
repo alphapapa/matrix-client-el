@@ -682,8 +682,7 @@ Also update prompt with typers."
     (with-room-buffer room
       (pcase-let* (((eieio avatar typers name topic session) room)
                    ((eieio user) session)
-                   (name (when name
-                           (propertize name 'face 'font-lock-keyword-face)))
+                   (name (propertize (or name display-name) 'face 'font-lock-keyword-face))
                    (ov (car (ov-in 'matrix-client-prompt)))
                    (typers-string (s-join ", " (cl-loop for typer across typers
                                                         unless (string= user typer)
